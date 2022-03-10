@@ -27,6 +27,7 @@ public class Main {
 			OutputParser outputParser = new OutputParser(outputDirectory + "/" + file + "_out");
 			outputParser.parseOutput(indexes);
 			outputParser.close();
+			break;
 		}
 		System.out.println("FINITO!");
 	}
