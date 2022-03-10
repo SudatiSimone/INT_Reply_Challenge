@@ -17,7 +17,7 @@ public class Algorithm {
 			// Reload stamina
 			for(int k = 0; k < t; k++) {
 				if(koDemons[k] != null && koDemons[k].staminaCooldown + k <= t) {
-					pandora.currentStamina += Math.min(koDemons[k].staminaRestored, pandora.totalStamina);
+					pandora.currentStamina = Math.min(koDemons[k].staminaRestored + pandora.currentStamina, pandora.totalStamina);
 					koDemons[k] = null;
 				}
 			}
