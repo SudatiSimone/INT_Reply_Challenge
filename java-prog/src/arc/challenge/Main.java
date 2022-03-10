@@ -28,6 +28,7 @@ public class Main {
 			outputParser.parseOutput(indexes);
 			outputParser.close();
 		}
+		System.out.println("FINITO!");
 	}
 	
 }
