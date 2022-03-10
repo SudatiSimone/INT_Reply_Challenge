@@ -195,7 +195,7 @@ public class Algorithm {
 			for(int t = 0; (t < tMax-tAtt) && t < totalTurns; t++) {
 				totalPoints += points.get(t);
 			}
-			totalPoints += random.nextInt(Math.min(tMax-tAtt, 20));
+			totalPoints += random.nextInt(Math.min(tMax-tAtt, 10));
 			if(staminaCost > 0) {
 				pointRatio = ((float) totalPoints) / ((float) staminaCost);
 			} else {
