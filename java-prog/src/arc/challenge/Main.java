@@ -28,9 +28,6 @@ public class Main {
 			outputParser.parseOutput(indexes);
 			outputParser.close();
 			i++;
-			if(i > 4) {
-				break;
-			}
 		}
 		System.out.println("FINITO!");
 	}
