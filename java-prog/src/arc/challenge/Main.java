@@ -19,7 +19,7 @@ public class Main {
 			// Parse input
 			InputParser inputParser = new InputParser(inputDirectory + "/" + file);
 			Pandora pandora = inputParser.parsePandora();
-			List<Demon> demons = inputParser.parseDemons(pandora.totalDemons);
+			List<Demon> demons = inputParser.parseDemons(pandora);
 			inputParser.close();
 			// Solutioning
 			List<Integer> indexes = algo.solve(pandora, demons);
