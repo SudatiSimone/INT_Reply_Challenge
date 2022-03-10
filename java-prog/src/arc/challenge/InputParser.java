@@ -48,4 +48,7 @@ public class InputParser {
 		return demons;
 	}
 	
+	public void close() throws IOException {
+		br.close();
+	}
 }
