@@ -12,7 +12,7 @@ public class Main {
 		String inputDirectory = "input";
 		String outputDirectory = "output";
 		
-		
+		int i = 0;
 		for(String file : inputFiles) {
 			Algorithm algo = new Algorithm();
 			System.out.println("FILE: " + file);
@@ -27,7 +27,10 @@ public class Main {
 			OutputParser outputParser = new OutputParser(outputDirectory + "/" + file + "_out");
 			outputParser.parseOutput(indexes);
 			outputParser.close();
-			break;
+			i++;
+			if(i > 4) {
+				break;
+			}
 		}
 		System.out.println("FINITO!");
 	}

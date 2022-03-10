@@ -49,6 +49,7 @@ public class Algorithm {
 //		Optional<DemonExtended> demonOpt = aliveDemons.stream().filter(d -> pandora.currentStamina >= d.staminaCost).sorted(new DemonComparator()).findFirst();
 		List<DemonExtended> sortedAliveDemons = aliveDemons.stream().filter(d -> pandora.currentStamina >= d.staminaCost).sorted(new DemonComparator()).collect(Collectors.toList());
 		
+		// Prendo il primo
 		Optional<DemonExtended> demonOpt = Optional.ofNullable(sortedAliveDemons.size() > 0 ? sortedAliveDemons.get(0) : null);
 		// Simulazione turno corrente
 		int currentStaminaTmp = pandora.currentStamina;
@@ -86,6 +87,7 @@ public class Algorithm {
 			totalScoreTmp += choosenOne.totalPoints;
 		}
 		
+		// Prendo il secondo
 		Optional<DemonExtended> demonOpt2 = Optional.ofNullable(sortedAliveDemons.size() > 1 ? sortedAliveDemons.get(1) : null);
 		// Simulazione turno corrente
 		int currentStaminaTmp2 = pandora.currentStamina;
@@ -122,7 +124,54 @@ public class Algorithm {
 			indexesTmp2.add(choosenOne.index);
 			totalScoreTmp2 += choosenOne.totalPoints;
 		}
-		return totalScoreTmp > totalScoreTmp2 ? demonOpt : demonOpt2;
+		
+		// Prendo il terzo
+		Optional<DemonExtended> demonOpt3 = Optional.ofNullable(sortedAliveDemons.size() > 2 ? sortedAliveDemons.get(2) : null);
+		// Simulazione turno corrente
+		int currentStaminaTmp3 = pandora.currentStamina;
+		Demon[] koDemonsTmp3 = Arrays.copyOf(koDemons, pandora.totalTurns);
+		List<DemonExtended> aliveDemonsTmp3 = new ArrayList<>(aliveDemons);
+		List<Integer> indexesTmp3 = new LinkedList<>(indexes);
+		Integer totalScoreTmp3 = totalScore;
+		if(demonOpt3.isPresent()) {
+			DemonExtended choosenOne = demonOpt3.get();
+			// Defeat demon
+			currentStaminaTmp3 -= choosenOne.staminaCost;
+			koDemonsTmp3[t] = choosenOne;
+			aliveDemonsTmp3.remove(choosenOne);
+			indexesTmp3.add(choosenOne.index);
+			totalScoreTmp3 += choosenOne.totalPoints;
+		}
+		// Reload stamina
+		for(int k = 0; k < t + 1; k++) {
+			if(koDemonsTmp3[k] != null && koDemonsTmp3[k].staminaCooldown + k <= t + 1) {
+				currentStaminaTmp3 = Math.min(koDemonsTmp3[k].staminaRestored + currentStaminaTmp3, pandora.totalStamina);
+				koDemonsTmp3[k] = null;
+			}
+		}
+		// Simulazione turno successivo
+		int finalcurrentStaminaTmp3 = currentStaminaTmp3;
+		aliveDemonsTmp3.forEach(d -> d.init(t + 1, pandora.totalTurns));
+		Optional<DemonExtended> demonOptTmp3 = aliveDemonsTmp3.stream().filter(d -> finalcurrentStaminaTmp3 >= d.staminaCost).sorted(new DemonComparator()).findFirst();
+		if(demonOptTmp3.isPresent()) {
+			DemonExtended choosenOne = demonOptTmp3.get();
+			// Defeat demon
+			currentStaminaTmp3 -= choosenOne.staminaCost;
+			koDemonsTmp3[t] = choosenOne;
+			aliveDemonsTmp3.remove(choosenOne);
+			indexesTmp3.add(choosenOne.index);
+			totalScoreTmp3 += choosenOne.totalPoints;
+		}
+		
+		// prendi il maggiore fra 3
+		Optional<DemonExtended> result;
+		if(totalScoreTmp >= totalScoreTmp2 && totalScoreTmp > totalScoreTmp3) {
+			return demonOpt;
+		} else if(totalScoreTmp2 >= totalScoreTmp3){
+			return demonOpt2;
+		} else {
+			return demonOpt3;
+		}
 	}
 	
 	class DemonExtended extends Demon {
